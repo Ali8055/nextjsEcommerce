@@ -1,37 +1,68 @@
-'use client'
+"use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import StarRatings from "react-star-ratings";
 import BreadCrumbs from "../layouts/BreadCrumbs";
+import { useDispatch } from "react-redux";
+import { add, addCartItems } from "@/redux/cartSlice/slice";
 // import NewReview from "../reviews/NewReview";
 // import Reviews from "../reviews/Reviews";
 
-const ProductDetails = ({product}) => {
-  const inStock = product?.stock>=1;
+const ProductDetails = ({ product }) => {
+  const inStock = product?.stock >= 1;
   const breadCrumbs = [
-    {name:"Home",url:'/'},
-    {name:`${product?.name?.substring(0,100)} ...`,url:`/product/${product?._id}`}
-  ]
+    { name: "Home", url: "/" },
+    {
+      name: `${product?.name?.substring(0, 100)} ...`,
+      url: `/product/${product?._id}`,
+    },
+  ];
   const imgRef = useRef(null);
-  function setImage(url){
-    imgRef.current.src = url
+  function setImage(url) {
+    imgRef.current.src = url;
   }
+
+  const dispatch = useDispatch();
+
+  const handleCart = () => {
+    dispatch(
+      addCartItems({
+        product: product._id,
+        name: product.name,
+        price: product.price,
+        // image: product?.image[0].url,
+        image: "image",
+        stock: product.stock,
+        seller: product.seller,
+      })
+    );
+    // setCart(
+    //   localStorage.getItem("cart")
+    //     ? JSON.parse(localStorage.getItem("cart"))
+    //     : []
+    // );
+  };
+
+  // const isItemExist = cart?.cartItems?.find(
+  //   (i) =>  i.product === item.product
+  // )
+
+  // if (isItemExist)
   return (
     <>
-      <BreadCrumbs breadCrumbs={breadCrumbs}/>
-      <section className="bg-white py-10">
+      <BreadCrumbs breadCrumbs={breadCrumbs} />
+      <section className="bg-white py-10 ">
         <div className="container max-w-screen-xl mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-5">
             <aside>
               <div className="border border-gray-200 shadow-sm p-3 text-center rounded mb-5">
                 <img
-                ref={imgRef}
+                  ref={imgRef}
                   className="object-cover inline-block"
                   src={
                     product?.images[0]
                       ? product?.images[0].url
-                      : 
-                      "/images/default_product.svg"
+                      : "/images/default_product.svg"
                   }
                   alt="Product title"
                   width="340"
@@ -39,18 +70,20 @@ const ProductDetails = ({product}) => {
                 />
               </div>
               <div className="space-x-2 overflow-auto text-center whitespace-nowrap">
-                {product?.images?.map((img,index)=>( 
-                
-                <a key={img.url} onClick={()=>setImage(img?.url)} className="inline-block border border-gray-200 p-1 rounded-md hover:border-blue-500 cursor-pointer">
-                  <img
-                    className="w-14 h-14"
-                    src={img.url}
-                    alt="Product title"
-                    width="500"
-                    height="500"
+                {product?.images?.map((img, index) => (
+                  <a
+                    key={img.url}
+                    onClick={() => setImage(img?.url)}
+                    className="inline-block border border-gray-200 p-1 rounded-md hover:border-blue-500 cursor-pointer">
+                    <img
+                      className="w-14 h-14"
+                      src={img.url}
+                      alt="Product title"
+                      width="500"
+                      height="500"
                     />
-                </a>
-                  ))}
+                  </a>
+                ))}
               </div>
             </aside>
             <main>
@@ -73,8 +106,7 @@ const ProductDetails = ({product}) => {
                   width="6px"
                   height="6px"
                   viewBox="0 0 6 6"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                  xmlns="http://www.w3.org/2000/svg">
                   <circle cx="3" cy="3" r="3" fill="#DBDBDB" />
                 </svg>
 
@@ -83,12 +115,12 @@ const ProductDetails = ({product}) => {
 
               <p className="mb-4 font-semibold text-xl">${product?.price}</p>
 
-              <p className="mb-4 text-gray-500">
-                {product?.description}
-              </p>
+              <p className="mb-4 text-gray-500">{product?.description}</p>
 
               <div className="flex flex-wrap gap-2 mb-5">
-                <button className="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700">
+                <button
+                  onClick={handleCart}
+                  className="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700">
                   <i className="fa fa-shopping-cart mr-2"></i>
                   Add to cart
                 </button>
@@ -98,10 +130,11 @@ const ProductDetails = ({product}) => {
                 <li className="mb-1">
                   {" "}
                   <b className="font-medium w-36 inline-block">Stock</b>
-                  {inStock
-                  ?<span className="text-gray-500">In Stock</span>
-                  :<span className="text-gray-500">Out of Stock</span>
-                  }
+                  {inStock ? (
+                    <span className="text-gray-500">In Stock</span>
+                  ) : (
+                    <span className="text-gray-500">Out of Stock</span>
+                  )}
                 </li>
                 <li className="mb-1">
                   {" "}
