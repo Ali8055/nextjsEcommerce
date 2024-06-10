@@ -25,7 +25,7 @@ const Search = () => {
         placeholder="Enter your keyword"
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
-        required
+        
       />
       <button
         type="button"

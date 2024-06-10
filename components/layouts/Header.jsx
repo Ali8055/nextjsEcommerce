@@ -1,9 +1,14 @@
+'use client'
+
 import React from "react";
 import Link from "next/link";
 import Search from "./Search";
 import Image from "next/image";
-
+import { useSelector } from "react-redux";
+import { selectCartItems } from "@/redux/cartSlice/slice";
 const Header = () => {
+  const cartDetails = useSelector(selectCartItems);
+  console.log(cartDetails,"cartDetails");
   return (
     <header className="bg-white py-2 border-b">
       <div className="container max-w-screen-xl mx-auto px-4">
@@ -27,7 +32,7 @@ const Header = () => {
             >
               <i className="text-gray-400 w-5 fa fa-shopping-cart"></i>
               <span className="hidden lg:inline ml-1">
-                Cart (<b>0</b>)
+                Cart (<b>{cartDetails.length}</b>)
               </span>
             </Link>
             <Link
