@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { selectCartItems, updateItemQuantity } from "@/redux/cartSlice/slice";
+import { RemoveItemFromCart, selectCartItems, updateItemQuantity } from "@/redux/cartSlice/slice";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
@@ -118,7 +118,11 @@ function Cart() {
                             <a
                               className="px-4 py-2 inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer"
                               onClick={() =>
-                                deleteItemFromCart(cartItem?.product)
+                                dispatch(
+                                  RemoveItemFromCart({
+                                    productId: cartItem.product,
+                                  })
+                                )
                               }
                             >
                               Remove

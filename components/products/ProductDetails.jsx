@@ -5,6 +5,7 @@ import StarRatings from "react-star-ratings";
 import BreadCrumbs from "../layouts/BreadCrumbs";
 import { useDispatch } from "react-redux";
 import { add, addCartItems } from "@/redux/cartSlice/slice";
+import Image from "next/image";
 // import NewReview from "../reviews/NewReview";
 // import Reviews from "../reviews/Reviews";
 
@@ -36,18 +37,9 @@ const ProductDetails = ({ product }) => {
         seller: product.seller,
       })
     );
-    // setCart(
-    //   localStorage.getItem("cart")
-    //     ? JSON.parse(localStorage.getItem("cart"))
-    //     : []
-    // );
+
   };
 
-  // const isItemExist = cart?.cartItems?.find(
-  //   (i) =>  i.product === item.product
-  // )
-
-  // if (isItemExist)
   return (
     <>
       <BreadCrumbs breadCrumbs={breadCrumbs} />
@@ -56,7 +48,7 @@ const ProductDetails = ({ product }) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-5">
             <aside>
               <div className="border border-gray-200 shadow-sm p-3 text-center rounded mb-5">
-                <img
+                <Image
                   ref={imgRef}
                   className="object-cover inline-block"
                   src={
@@ -75,7 +67,7 @@ const ProductDetails = ({ product }) => {
                     key={img.url}
                     onClick={() => setImage(img?.url)}
                     className="inline-block border border-gray-200 p-1 rounded-md hover:border-blue-500 cursor-pointer">
-                    <img
+                    <Image
                       className="w-14 h-14"
                       src={img.url}
                       alt="Product title"

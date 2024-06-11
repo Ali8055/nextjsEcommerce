@@ -2,8 +2,25 @@ import React from "react";
 import Link from "next/link";
 import StarRatings from "react-star-ratings";
 import Image from "next/image";
+import { useDispatch } from "react-redux";
+import { addCartItems } from "@/redux/cartSlice/slice";
 
 const ProductItem = ({ product }) => {
+  const dispatch = useDispatch();
+  const AddToCart = () => {
+    dispatch(
+      addCartItems({
+        product: product._id,
+        name: product.name,
+        price: product.price,
+        // image: product?.image[0].url,
+        image: "image",
+        stock: product.stock,
+        seller: product.seller,
+      })
+    );
+
+  };
   return (
     <article className="border border-gray-200 overflow-hidden bg-white shadow-sm rounded mb-5">
       <div className="flex flex-col md:flex-row">
@@ -65,7 +82,9 @@ const ProductItem = ({ product }) => {
 
             <p className="text-green-500">Free Shipping</p>
             <div className="my-3">
-              <a className="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 cursor-pointer">
+              <a className="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 cursor-pointer"
+              onClick={()=>AddToCart()}
+              >
                 {" "}
                 Add to Cart{" "}
               </a>

@@ -4,7 +4,7 @@ const initialState = {
   loading: false,
   error: null,
   status: null,
-    cart:[],
+  cart: [],
 };
 
 // export const add = createAsyncThunk(
@@ -26,38 +26,42 @@ const cartSlice = createSlice({
     addCartItems: (state, action) => {
       //yaha ek filter lagyga agar already exist karta hy to uska count brhana hoga
 
-
-      //action.payload ko open karygy
-      console.log();
-      let item = action.payload;
-      item.quantity = 1;
-
-      // const isItemExist = state.cart.find((i)=>i.item===item.product)
-
-
-      // state.cart.map((itteratedItem)=>{
-      //   console.log(itteratedItem,"itteratedItem");
-      //   return itteratedItem.product === isItemExist.product ?itteratedItem.quantity+=1:itteratedItem;
-      // })
-      state.cart.push(item);
-      console.log(item,"actioncart", action.payload);
+      const itemIndex = state.cart.findIndex(
+        (i) => i.product == action.payload.product
+      );
+      if (itemIndex !== -1) {
+          state.cart[itemIndex].quantity = ++state.cart[itemIndex].quantity;
+        console.log("Updated cart state:");
+      } else {
+        console.log("Item not found in cart:");
+        let item = action.payload;
+        item.quantity = 1;
+        state.cart.push(item);
+      }
     },
     updateItemQuantity: (state, action) => {
       const { productId, quantity } = action.payload;
-      console.log("productId, quantity",productId, quantity);
+      console.log("productId, quantity", productId, quantity);
 
-      const arrayOfItems = state.cart;
-      const itemIndex = state.cart.findIndex((i) => i.productId == productId);
+      const itemIndex = state.cart.findIndex((i) => i.product == productId);
       if (itemIndex !== -1) {
         if (quantity > 0) {
-          arrayOfItems[itemIndex].quantity = quantity;
+          state.cart[itemIndex].quantity = quantity;
         } else {
-          arrayOfItems.splice(itemIndex, 1);
+          state.cart.splice(itemIndex, 1);
         }
         console.log("Updated cart state:", state.cart);
       } else {
         console.log("Item not found in cart:", productId);
       }
+    },
+    RemoveItemFromCart: (state, action) => {
+      const { productId } = action.payload;
+
+      const itemIndex = state.cart.findIndex((i) => i.product == productId);
+   
+          state.cart.splice(itemIndex, 1);
+   
     },
   },
 
@@ -77,7 +81,7 @@ const cartSlice = createSlice({
   },
 });
 
-export const selectCartItems = (state)=>state.cart.cart;
-export const { addCartItems,updateItemQuantity } = cartSlice.actions;
+export const selectCartItems = (state) => state.cart.cart;
+export const { addCartItems, updateItemQuantity,RemoveItemFromCart } = cartSlice.actions;
 
 export default cartSlice.reducer;
