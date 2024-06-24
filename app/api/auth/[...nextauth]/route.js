@@ -16,10 +16,12 @@ const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log("credentails", credentials), await dbConnect();
+        console.log("credentails checking next auth", credentials),
+          await dbConnect();
         const { email, password } = credentials;
 
         const user = await User.findOne({ email }).select("+password");
+        console.log("user23", user);
 
         if (!user) {
           throw new Error("Invalid Email or Password");
@@ -32,14 +34,38 @@ const authOptions = {
           throw new Error("Invalid Email or Password");
         }
 
-        return { id: user._id, name: user.name, email: user.email };
+        return user;
       },
     }),
   ],
   pages: {
-    signIn: "/auth/sign",
+    signIn: "/auth/signin",
   },
   secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    async jwt({ token, user }) {
+      // if (user) {
+      //   token.id = user.id;
+      //   token.name = user.name;
+      //   token.email = user.email;
+      //   token.avatar = user.avatar;
+      //   token.createdAt = user.createdAt;
+      // }
+      user && (token.user = user);
+      return token;
+    },
+    async session({ session, token }) {
+      // session.user.id = token.id;
+      // session.user.name = token.name;
+      // session.user.email = token.email;
+      // session.user.avatar = token.avatar;
+      // session.user.createdAt = token.createdAt;
+      session.user = token.user;
+      delete session?.user?.password;
+
+      return session;
+    },
+  },
 };
 
 export { authOptions };

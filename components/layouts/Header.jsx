@@ -11,7 +11,7 @@ const Header = () => {
   const cartDetails = useSelector(selectCartItems);
   const { data: session, status } = useSession();
   console.log("session data", session?.user, status);
-  console.log(cartDetails, "cartDetails");
+
   return (
     <header className="bg-white py-2 border-b">
       <div className="container max-w-screen-xl mx-auto px-4">
