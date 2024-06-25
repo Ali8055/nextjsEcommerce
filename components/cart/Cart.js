@@ -1,14 +1,26 @@
 "use client";
 
 import React from "react";
-import { RemoveItemFromCart, selectCartItems, updateItemQuantity } from "@/redux/cartSlice/slice";
+import {
+  RemoveItemFromCart,
+  selectCartItems,
+  updateItemQuantity,
+} from "@/redux/cartSlice/slice";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
+
 function Cart() {
   const dispatch = useDispatch();
   const cartDetails = useSelector(selectCartItems);
   console.log(cartDetails, "cartDetails");
+
+  const totalPrice = cartDetails
+    .reduce((acc, cartItem) => {
+      return acc + cartItem.price * cartItem.quantity;
+    }, 0)
+    .toFixed(2);
+
   return (
     <>
       <section className="py-5 sm:py-7 bg-blue-100">
@@ -32,7 +44,7 @@ function Cart() {
                           <figure className="flex leading-5">
                             <div>
                               <div className="block w-16 h-16 rounded border border-gray-200 overflow-hidden">
-                                {/* <img src={cartItem.image} alt={cartItem.name} /> */}
+                                <img src={cartItem.image} alt={cartItem.name} />
                               </div>
                             </div>
                             <figcaption className="ml-3">
@@ -68,19 +80,17 @@ function Cart() {
                                     quantity: qty,
                                   })
                                 );
-                              }}
-                            >
+                              }}>
                               <span className="m-auto text-2xl font-thin">
                                 −
                               </span>
                             </button>
                             <input
                               type="number"
-                              className="outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-900  outline-none custom-input-number"
+                              className="outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-900 custom-input-number"
                               name="custom-input-number"
                               value={cartItem.quantity}
-                              readOnly
-                            ></input>
+                              readOnly></input>
                             <button
                               data-action="increment"
                               className="bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer"
@@ -94,8 +104,7 @@ function Cart() {
                                     quantity: qty,
                                   })
                                 );
-                              }}
-                            >
+                              }}>
                               <span className="m-auto text-2xl font-thin">
                                 +
                               </span>
@@ -123,8 +132,7 @@ function Cart() {
                                     productId: cartItem.product,
                                   })
                                 )
-                              }
-                            >
+                              }>
                               Remove
                             </a>
                           </div>
@@ -159,18 +167,19 @@ function Cart() {
                     </li>
                     <li className="text-lg font-bold border-t flex justify-between mt-3 pt-3">
                       <span>Total price:</span>
-                      {/* <span>${totalAmount}</span> */}
+                      <span>${totalPrice}</span>
                     </li>
                   </ul>
 
-                  <a className="px-4 py-3 mb-2 inline-block text-lg w-full text-center font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 cursor-pointer">
+                  <Link
+                    href="/shipping"
+                    className="px-4 py-3 mb-2 inline-block text-lg w-full text-center font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 cursor-pointer">
                     Continue
-                  </a>
+                  </Link>
 
                   <Link
                     href="/"
-                    className="px-4 py-3 inline-block text-lg w-full text-center font-medium text-green-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100"
-                  >
+                    className="px-4 py-3 inline-block text-lg w-full text-center font-medium text-green-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100">
                     Back to shop
                   </Link>
                 </article>

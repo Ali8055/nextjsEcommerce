@@ -30,7 +30,7 @@ const cartSlice = createSlice({
         (i) => i.product == action.payload.product
       );
       if (itemIndex !== -1) {
-          state.cart[itemIndex].quantity = ++state.cart[itemIndex].quantity;
+        state.cart[itemIndex].quantity = ++state.cart[itemIndex].quantity;
         console.log("Updated cart state:");
       } else {
         console.log("Item not found in cart:");
@@ -59,9 +59,8 @@ const cartSlice = createSlice({
       const { productId } = action.payload;
 
       const itemIndex = state.cart.findIndex((i) => i.product == productId);
-   
-          state.cart.splice(itemIndex, 1);
-   
+
+      state.cart.splice(itemIndex, 1);
     },
   },
 
@@ -82,6 +81,7 @@ const cartSlice = createSlice({
 });
 
 export const selectCartItems = (state) => state.cart.cart;
-export const { addCartItems, updateItemQuantity,RemoveItemFromCart } = cartSlice.actions;
+export const { addCartItems, updateItemQuantity, RemoveItemFromCart } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;
