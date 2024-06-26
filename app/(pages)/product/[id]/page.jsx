@@ -20,7 +20,7 @@ async function getProductDetails(id) {
 }
 const ProductDetailsPage = async ({ params }) => {
   const product = await getProductDetails(params.id);
-  return <ProductDetails product={product} />;
+  return <ProductDetails product={product} baseUrl={baseUrl} />;
 };
 
 export default ProductDetailsPage;

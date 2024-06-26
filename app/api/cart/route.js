@@ -1,32 +1,25 @@
 import dbConnect from "@/backend/config/dbConnect";
-import Cart from "@/components/cart/Cart";
+import Cart from "@/backend/models/cart";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
   await dbConnect();
-  const {
-    productId,
-    image,
-    productName,
-    productPrice,
-    seller,
-    stock,
-    quantity,
-    userId,
-  } = await req.json();
-  console.log("Data", req.json);
+  const { cartDetails, userId } = await req.json();
+  console.log("Data", cartDetails, userId);
   try {
-    const cart = await Cart.create({
-      productId,
-      image,
-      productName,
-      productPrice,
-      seller,
-      stock,
-      quantity,
-      userId,
-    });
-    console.log("Carttt", cart);
+    for (const item of cartDetails) {
+      await Cart.create({
+        productId: item.product,
+        image: item.image,
+        productName: item.name,
+        productPrice: item.price,
+        seller: item.seller,
+        stock: item.stock,
+        quantity: item.quantity,
+        userId,
+      });
+    }
+    // console.log("Carttt", cart);
     return NextResponse.json({ message: "Added to cart!", status: 201 });
   } catch (error) {
     console.log("error", error.message);
